@@ -1,0 +1,8 @@
+Link to publicly available data:
+https://www.transitwiki.org/TransitWiki/index.php/Publicly-accessible_public_transportation_data
+
+Massachussetts data:
+https://www.mbta.com/developers/gtfs-realtime
+
+
+spark-submit --master spark://localhost:9092 --deploy-mode client --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 /home/nate/Documents/Python_Projects/GTFS_Analysis/Spark_Streaming_Session_Creator_v1.py
