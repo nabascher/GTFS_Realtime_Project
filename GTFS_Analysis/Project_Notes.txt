@@ -4,5 +4,45 @@ https://www.transitwiki.org/TransitWiki/index.php/Publicly-accessible_public_tra
 Massachussetts data:
 https://www.mbta.com/developers/gtfs-realtime
 
+See overview of Spark streaming to better understand how this process works:
+https://spark.apache.org/docs/latest/streaming-programming-guide.html
 
-spark-submit --master spark://localhost:9092 --deploy-mode client --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 /home/nate/Documents/Python_Projects/GTFS_Analysis/Spark_Streaming_Session_Creator_v1.py
+
+Needed software:
+    1) apache kafka
+    2) apache spark
+
+Python Libraries    
+    1) apache sedona
+    2) pyspark
+    3) gtfs realtime bindings
+    4) confluent kafka 
+    5) requests
+
+The following processes need to be running before starting this process:
+    1) kafka
+        a) systemctl start kafka
+    2) spark master
+        systemctl start spark-master
+    3) spark worker
+        systemctl start spark-worker   
+
+Step by step process:
+    1. Upon opening linux, make sure to create a kafka topic to ingest the data into.  
+        a) These kafka topics dissapear eventually.
+        b) Run this command to create the kafka topic:
+            kafka-topics.sh --create --topic mbta-realtime --bootstrap-server localhost:9092
+        
+    2. Run the Kafka_Producer_v1.py python script.  
+        a) This will publish the data into the apache kafka topic for ingestion into spark.
+        b) Run continuously as you run the analysis
+
+    3. Run the Bash script that also runs the Spark_Streaming_Session_Creator_v1.py python script
+        a) This will create the streaming session and run the analysis with sedona.
+        b) Needs to be run from cli because spark-submit must be run first to establish the streaming session
+        c) Bash script for enabling spark streaming and running the analysis script:
+            spark-submit --master spark://localhost:9092 --deploy-mode client --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 /home/nate/Documents/Python_Projects/GTFS_Analysis/Spark_Streaming_Session_Creator_v1.py
+
+Temp Notes:
+    1. Might make sense to create a bash script that will also create the kafka topic before
+    running the producer script. 
