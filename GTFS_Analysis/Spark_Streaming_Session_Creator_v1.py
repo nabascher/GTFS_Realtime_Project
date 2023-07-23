@@ -13,33 +13,37 @@ sedona = SedonaContext.create(config)
 #Define Spark streaming context and build app
 spark = SparkSession \
   .builder \
-  .appName("GTFS-realtime Ingestion") \
+  .appName("Spark_Streaming_Session_Creator_v1.py") \
   .getOrCreate()
 
 # Load kafka data into spark streaming session
-test_df = spark \
+stream_df = spark \
   .readStream \
   .format("kafka") \
   .option("kafka.bootstrap.servers", "localhost:9092") \
   .option("subscribe", "mbta-realtime") \
   .load()
-test_df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)") 
+stream_df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+stream_df.printSchema()
 
 #Parse out JSON and extract geometry field
-parsed_df = test_df.select(col("value").cast("string").alias("json_value")) \
+parsed_df = stream_df \
+  .select(col("value") \
+  .cast("string").alias("json_value")) \
   .selectExpr("get_json_object(json_value, '$.vehicle.position') AS geometry")
+parsed_df.printSchema()
+parsed_df.createOrReplaceTempView("parsed_json")
 
-#Convert the geometry to wkt format
-wkt_df = parsed_df.withColumn("wkt_geometry", st_geomFromWKT(col("geometry")))
+#Convert the geometry to wkt and create spatial dataframe
+spatial_df = sedona.sql("SELECT st_geomFromWKT(geometry) AS wkt_geometry FROM parsed_json")
+spatial_df.printSchema()
 
-#Create the Sedona dataframe
-spatial_df = wkt_df.select("wkt_geometry")
-
-#Start the streaming query to process data in real-time
+#Start the streaming query to process data in realtime
 query = spatial_df.writeStream \
     .outputMode("append") \
     .format("console") \
-    .start()
+    .start() \
 
 query.awaitTermination()
 
+spark.stop()
