@@ -19,6 +19,9 @@ Python Libraries
     4) confluent kafka 
     5) requests
 
+See Sedona's pip file for their currect versions of python libraries:
+    https://github.com/apache/sedona/blob/master/python/Pipfile
+
 The following processes need to be running before starting this process:
     1) kafka
         a) systemctl start kafka
@@ -28,7 +31,7 @@ The following processes need to be running before starting this process:
         systemctl start spark-worker   
 
 Step by step process:
-    1. Upon opening linux, make sure to create a kafka topic to ingest the data into.  
+    1. *LOOKS LIKE YOU CAN SKIP THIS STEP???* Upon opening linux on a new computer, make sure to create a kafka topic to ingest the data into.  
         a) These kafka topics dissapear eventually.
         b) Run this command to create the kafka topic:
             kafka-topics.sh --create --topic mbta-realtime --bootstrap-server localhost:9092
@@ -43,6 +46,8 @@ Step by step process:
         c) Bash script for enabling spark streaming and running the analysis script:
             spark-submit --master spark://localhost:9092 --deploy-mode client --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 /home/nate/Documents/Python_Projects/GTFS_Analysis/Spark_Streaming_Session_Creator_v1.py
 
-Temp Notes:
+Daily Notes:
     1. Might make sense to create a bash script that will also create the kafka topic before
-    running the producer script. 
+    running the producer script (7/8). 
+    2. Still can't shake the issues with registering the spatial sql functions.  
+    Joined the sedona discord server and will ask them about how to do it.
