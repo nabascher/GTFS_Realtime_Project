@@ -49,5 +49,13 @@ Step by step process:
 Daily Notes:
     1. Might make sense to create a bash script that will also create the kafka topic before
     running the producer script (7/8). 
+
     2. Still can't shake the issues with registering the spatial sql functions.  
-    Joined the sedona discord server and will ask them about how to do it.
+    Joined the sedona discord server and will ask them about how to do it(7/16).
+
+    3. I think I might be okay now with the spatial functions? 
+    I think the issue was the way ChatGPT was formatting the code. 
+    Next step is to figure out how to parse out the geometry information from the json data (7/23).
+
+    4. It appears that I have a dataframe with a geometry and a timestamp value. Need to run some more tests.
+    Next I will add in the geofence dataframes and get geopandas set up (7/28)   
