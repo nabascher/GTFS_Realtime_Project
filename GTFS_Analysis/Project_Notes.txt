@@ -58,4 +58,8 @@ Daily Notes:
     Next step is to figure out how to parse out the geometry information from the json data (7/23).
 
     4. It appears that I have a dataframe with a geometry and a timestamp value. Need to run some more tests.
-    Next I will add in the geofence dataframes and get geopandas set up (7/28)   
+    Next I will add in the geofence dataframes and get geopandas set up (7/28).
+
+    5.Have configured geopandas for use with the sedona environment. Geofences have been addeds as geopandas geodataframes.
+    Have also begun to use jupyter notebook for additional visual QC. 
+    Should decide about whether to convert those to sedona dataframes (7/30).    
