@@ -2,6 +2,19 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 from sedona.spark import *
+from shapely import wkt
+import geopandas as gpd
+import pandas as pd
+
+#Add wkt csvs as geopandas geodataframes
+chinatown_df = pd.read_csv('Geofences/chinatown_wkt.csv')
+north_end_df = pd.read_csv('Geofences/Northend_wkt.csv')
+
+chinatown_df['geometry'] = chinatown_df['WKT'].apply(wkt.loads)
+north_end_df['geometry'] = north_end_df['WKT'].apply(wkt.loads)
+
+chinatown_gdf = gpd.GeoDataFrame(chinatown_df, crs='EPSG:3857')
+north_end_gdf = gpd.GeoDataFrame(north_end_df, crs='EPSG:3857')
 
 # Configure sedona
 config = SedonaContext.builder(). \
@@ -41,7 +54,7 @@ parsed_df.createOrReplaceTempView("parsed_json")
 
 #Convert the geometry to wkt and create spatial dataframe
 spatial_df = sedona.sql("SELECT timestamp, st_point(longitude, latitude) AS geometry FROM parsed_json")
-spatial_df.head()
+spatial_df.show(n=20)
 
 #Start the streaming query to process data in realtime
 query = spatial_df.writeStream \
