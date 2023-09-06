@@ -28,7 +28,9 @@ The following processes need to be running before starting this process:
     2) spark master
         systemctl start spark-master
     3) spark worker
-        systemctl start spark-worker   
+        systemctl start spark-worker  
+    Note:
+        Can run all these at once with:  systemctl start kafka spark-worker spark-master
 
 Step by step process:
     1. *LOOKS LIKE YOU CAN SKIP THIS STEP???* Upon opening linux on a new computer, make sure to create a kafka topic to ingest the data into.  
@@ -60,6 +62,13 @@ Daily Notes:
     4. It appears that I have a dataframe with a geometry and a timestamp value. Need to run some more tests.
     Next I will add in the geofence dataframes and get geopandas set up (7/28).
 
-    5.Have configured geopandas for use with the sedona environment. Geofences have been addeds as geopandas geodataframes.
+    5. Have configured geopandas for use with the sedona environment. Geofences have been addeds as geopandas geodataframes.
     Have also begun to use jupyter notebook for additional visual QC. 
     Should decide about whether to convert those to sedona dataframes (7/30).    
+
+    6. Need to fix the geometry column showing null for the values. 
+    Issue is that the data has been serialized to protobuf and I need it deserialized back to json. 
+    I can then proceed with analysis (09/01)
+
+    7. Made some changes to the streaming script and it seems to be formatted better. 
+    Not sure exactly why the streaming query is still returning null values (09/06)
