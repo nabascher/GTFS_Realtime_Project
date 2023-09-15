@@ -72,3 +72,6 @@ Daily Notes:
 
     7. Made some changes to the streaming script and it seems to be formatted better. 
     Not sure exactly why the streaming query is still returning null values (09/06)
+
+    8. Made even more modifications to the deserialization aspect of the script.
+    Query outputs still null. Might have to consult with the spark community on this one. (09/15)
